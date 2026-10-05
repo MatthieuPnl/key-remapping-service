@@ -13,6 +13,8 @@ public record KeyMappingView(KeyDefinition Source, KeyDefinition Target);
 /// <summary>Outcome of an operation: success, unknown keyboard, or invalid input.</summary>
 public record Result(ResultStatus Status, IReadOnlyList<string> Errors)
 {
+    public bool Success => Status == ResultStatus.Ok;
+    
     public static Result Ok() => new(ResultStatus.Ok, []);
     public static Result NotFound(string error) => new(ResultStatus.NotFound, [error]);
     public static Result Invalid(IReadOnlyList<string> errors) => new(ResultStatus.Invalid, errors);
