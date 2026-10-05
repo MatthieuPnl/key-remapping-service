@@ -22,6 +22,8 @@ builder.Services.AddSingleton<IKeyboardCatalog>(sp =>
 builder.Services.AddSingleton<IKeyMappingRepository, EfKeyMappingRepository>();
 builder.Services.AddSingleton<KeyMappingService>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -29,5 +31,13 @@ app.Services.GetRequiredService<IKeyboardCatalog>();
 app.Services.GetRequiredService<IKeyMappingRepository>().Initialize();
 
 app.MapKeyMappingEndpoints();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.Logger.LogInformation("Key Remapping Services ready");
 
 app.Run();

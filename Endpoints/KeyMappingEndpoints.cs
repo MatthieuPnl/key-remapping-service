@@ -9,9 +9,16 @@ public static class KeyMappingEndpoints
     {
         var group = app.MapGroup("/keyboards/{name}/mappings");
 
-        group.MapPatch("/", UpdateMappings);
+        group.MapPatch("/", UpdateMappings)
+            .WithSummary("Merge key mappings into the keyboard configuration")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound);
         
-        group.MapGet("/", GetAllMappings);
+        group.MapGet("/", GetAllMappings)
+            .WithSummary("Get all keys with their current target")
+            .Produces<IReadOnlyList<KeyMapping>>()
+            .Produces(StatusCodes.Status404NotFound);
     }
 
     private static IResult UpdateMappings(
